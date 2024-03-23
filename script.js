@@ -19,11 +19,24 @@ document.getElementById("startBFS").addEventListener("click", function () {
       alert("Start node not found in graph. Please enter a valid start node.");
       return;
     }
-    const bfsResult = bfs(graph, startNode.toString()); 
+    const bfsResult = bfs(graph, startNode.toString()); // Use the start node specified by the user
     displayBfsResult(bfsResult);
   };
   reader.readAsText(file);
 });
+
+function parseGraph(text) {
+  const edges = text.trim().split("\n");
+  const graph = {};
+  edges.forEach((edge) => {
+    const [from, to] = edge.split("\t").map(Number);
+    if (!graph[from]) graph[from] = [];
+    if (!graph[to]) graph[to] = [];
+    graph[from].push(to);
+    graph[to].push(from); // Add the reverse direction for undirected graph
+  });
+  return graph;
+}
 
 function parseGraph(text) {
   const edges = text.trim().split("\n");
@@ -45,7 +58,7 @@ function bfs(graph, start) {
   while (queue.length > 0) {
     const vertex = queue.shift();
     result.push(vertex);
-    const neighbors = graph[vertex];
+    const neighbors = graph[vertex].slice().sort((a, b) => a - b); // Sort neighbors in increasing order
     neighbors.forEach((neighbor) => {
       if (!visited.has(neighbor)) {
         visited.add(neighbor);
