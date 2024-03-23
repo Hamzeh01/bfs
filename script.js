@@ -1,26 +1,33 @@
-document.getElementById("startBFS").addEventListener("click", function () {
-  const fileInput = document.getElementById("fileInput");
-  const startNodeInput = document.getElementById("startNode");
+document.getElementById('startTraversal').addEventListener('click', function() {
+  const fileInput = document.getElementById('fileInput');
+  const startNodeInput = document.getElementById('startNode');
+  const algorithmChoice = document.getElementById('algorithmChoice').value;
   const file = fileInput.files[0];
   const startNode = parseInt(startNodeInput.value, 10);
-
+  
   if (!file) {
-    alert("Please upload a file.");
-    return;
+      alert('Please upload a file.');
+      return;
   }
   if (isNaN(startNode) || startNode < 1) {
-    alert("Please enter a valid start node (integer > 0).");
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    const graph = parseGraph(e.target.result);
-    if (!graph[startNode]) {
-      alert("Start node not found in graph. Please enter a valid start node.");
+      alert('Please enter a valid start node (integer > 0).');
       return;
-    }
-    const bfsResult = bfs(graph, startNode.toString()); // Use the start node specified by the user
-    displayBfsResult(bfsResult);
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+      const graph = parseGraph(e.target.result);
+      if (!graph[startNode]) {
+          alert('Start node not found in graph. Please enter a valid start node.');
+          return;
+      }
+      let result;
+      if (algorithmChoice === 'BFS') {
+          result = bfs(graph, startNode.toString());
+      } else if (algorithmChoice === 'DFS') {
+          result = dfs(graph, startNode.toString());
+      }
+      displayResult(result);
   };
   reader.readAsText(file);
 });
