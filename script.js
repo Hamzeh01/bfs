@@ -96,7 +96,7 @@ function dfs(graph, start) {
   return result;
 }
 
-function displayBfsResult(bfsResult) {
-  const container = document.getElementById("bfsTree");
-  container.innerHTML = `<pre>${JSON.stringify(bfsResult, null, 2)}</pre>`;
+function displayResult(result) {
+  const container = document.getElementById('traversalResult');
+  container.innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
 }
