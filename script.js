@@ -69,6 +69,26 @@ function bfs(graph, start) {
   return result;
 }
 
+function dfs(graph, start) {
+  const visited = new Set();
+  const stack = [start];
+  const result = [];
+  while (stack.length > 0) {
+    const vertex = stack.pop();
+    if (!visited.has(vertex)) {
+      visited.add(vertex);
+      result.push(vertex);
+      const neighbors = graph[vertex].slice().sort((a, b) => b - a); // Sort in decreasing order for stack
+      neighbors.forEach((neighbor) => {
+        if (!visited.has(neighbor)) {
+          stack.push(neighbor);
+        }
+      });
+    }
+  }
+  return result;
+}
+
 function displayBfsResult(bfsResult) {
   const container = document.getElementById("bfsTree");
   container.innerHTML = `<pre>${JSON.stringify(bfsResult, null, 2)}</pre>`;
