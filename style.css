@@ -1,18 +1,23 @@
 :root {
-    --background-color: #ddd; /* Lighter background for better contrast */
-    --foreground-color: #222; /* Darker text for readability */
-    --accent-color: #505050; /* A more attractive accent color */
-    --border-style: 2px solid var(--foreground-color);
-    --input-bg-color: #eee; /* Input background color for better contrast */
+    --background-color: #f4f4f9; /* A soft, light background */
+    --foreground-color: #3a3a55; /* A deep, contrast-rich foreground color */
+    --accent-color: #6a5acd; /* A vibrant purple accent */
+    --accent-secondary-color: #6495ed; /* A complementary blue accent */
+    --border-style: 2px solid var(--accent-color);
+    --input-bg-color: #ffffff;
+    --box-shadow-color: rgba(106, 90, 205, 0.3); /* Shadow color matching the purple accent */
 }
 
 body, html {
+    height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    font-family: 'Arial', sans-serif;
     background-color: var(--background-color);
     color: var(--foreground-color);
-    line-height: 1.5;
 }
 
 #app {
@@ -20,13 +25,20 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
     padding: 20px;
+    width: 80%;
+    max-width: 640px; /* Maintains a maximum width */
+    box-sizing: border-box;
+    min-height: 50vh; /* Minimum height to ensure vertical centering works with smaller content */
 }
+
 
 .form-group {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
+    width: 100%;
+    justify-content: center;
     margin-bottom: 20px;
 }
 
@@ -36,18 +48,21 @@ input[type="file"], input[type="number"], select, button {
     border: var(--border-style);
     color: var(--foreground-color);
     font-size: 16px;
-    border-radius: 0; /* Keeping to the Neobrutalism style of sharp edges */
+    border-radius: 5px; /* Softened edges for a more modern look */
+    box-shadow: 0 4px 6px var(--box-shadow-color); /* Subtle shadow for depth */
+    transition: all 0.3s ease; /* Smooth transition for interactive elements */
+    width: calc(50% - 12px);
+}
+
+input[type="file"]:hover, input[type="number"]:hover, select:hover, button:hover {
+    transform: translateY(-3px); /* Slight lift effect on hover */
+    box-shadow: 0 6px 12px var(--box-shadow-color);
 }
 
 button {
     cursor: pointer;
     background-color: var(--accent-color);
     color: var(--background-color);
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: var(--foreground-color);
 }
 
 #traversalResult {
@@ -57,9 +72,18 @@ button:hover {
     color: var(--background-color);
     border: var(--border-style);
     white-space: pre-wrap;
+    width: 100%;
+    box-sizing: border-box;
+    backdrop-filter: blur(5px); /* Blurring effect for the result container */
+    border-radius: 5px;
 }
 
-:is(input[type="file"], input[type="number"], select, button):focus {
-    outline: none;
-    border-color: var(--accent-color);
+@media (max-width: 768px) {
+    .form-group {
+        flex-direction: column;
+    }
+
+    input[type="file"], input[type="number"], select, button {
+        width: 100%; /* Full width on smaller screens */
+    }
 }
