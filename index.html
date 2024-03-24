@@ -9,21 +9,26 @@
   <body>
     <div id="app">
       <h1>Graph Traversal Visualization</h1>
-      <input type="file" id="fileInput" accept=".txt" />
-      <input
-        type="number"
-        id="startNode"
-        placeholder="Enter start node (integer > 0)"
-        min="1"
-        step="1"
-      />
-      <select id="algorithmChoice">
-        <option value="BFS">BFS</option>
-        <option value="DFS">DFS</option>
-      </select>
-      <button id="startTraversal">Start Traversal</button>
+      <div class="form-group">
+        <input type="file" id="fileInput" accept=".txt" />
+        <input
+          type="number"
+          id="startNode"
+          placeholder="Enter start node (integer > 0)"
+          min="1"
+          step="1"
+        />
+      </div>
+      <div class="form-group">
+        <select id="algorithmChoice">
+          <option value="BFS">BFS</option>
+          <option value="DFS">DFS</option>
+        </select>
+        <button id="startTraversal">Start Traversal</button>
+      </div>
       <div id="traversalResult"></div>
     </div>
+
     <script src="script.js"></script>
   </body>
 </html>
