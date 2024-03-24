@@ -1,18 +1,65 @@
+:root {
+    --background-color: #ddd; /* Lighter background for better contrast */
+    --foreground-color: #222; /* Darker text for readability */
+    --accent-color: #505050; /* A more attractive accent color */
+    --border-style: 2px solid var(--foreground-color);
+    --input-bg-color: #eee; /* Input background color for better contrast */
+}
+
 body, html {
-    font-family: Arial, sans-serif;
-    padding: 20px;
     margin: 0;
-    background-color: #f0f0f0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: var(--background-color);
+    color: var(--foreground-color);
+    line-height: 1.5;
 }
 
 #app {
-    max-width: 600px;
-    margin: auto;
-    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#bfsTree {
+.form-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input[type="file"], input[type="number"], select, button {
+    padding: 10px;
+    background: var(--input-bg-color);
+    border: var(--border-style);
+    color: var(--foreground-color);
+    font-size: 16px;
+    border-radius: 0; /* Keeping to the Neobrutalism style of sharp edges */
+}
+
+button {
+    cursor: pointer;
+    background-color: var(--accent-color);
+    color: var(--background-color);
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--foreground-color);
+}
+
+#traversalResult {
     margin-top: 20px;
+    padding: 20px;
+    background-color: var(--foreground-color);
+    color: var(--background-color);
+    border: var(--border-style);
+    white-space: pre-wrap;
+}
+
+:is(input[type="file"], input[type="number"], select, button):focus {
+    outline: none;
+    border-color: var(--accent-color);
 }
