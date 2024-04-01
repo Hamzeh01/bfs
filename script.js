@@ -3,9 +3,13 @@ document
   .addEventListener("click", function () {
     const fileInput = document.getElementById("fileInput");
     const startNodeInput = document.getElementById("startNode");
+    const endNodeInput = document.getElementById("endNode");
     const algorithmChoice = document.getElementById("algorithmChoice").value;
     const file = fileInput.files[0];
     const startNode = parseInt(startNodeInput.value, 10);
+    const endNode = endNodeInput.value
+      ? parseInt(endNodeInput.value, 10)
+      : null;
 
     if (!file) {
       alert("Please upload a file.");
@@ -27,9 +31,17 @@ document
       }
       let result;
       if (algorithmChoice === "BFS") {
-        result = bfs(graph, startNode.toString());
+        result = bfs(
+          graph,
+          startNode.toString(),
+          endNode && endNode.toString()
+        );
       } else if (algorithmChoice === "DFS") {
-        result = dfs(graph, startNode.toString());
+        result = dfs(
+          graph,
+          startNode.toString(),
+          endNode && endNode.toString()
+        );
       }
       displayResult(result);
     };
@@ -49,40 +61,60 @@ function parseGraph(text) {
   return graph;
 }
 
-function bfs(graph, start) {
+function bfs(graph, start, end = null) {
   const visited = new Set();
   const queue = [start];
   const result = [];
-  visited.add(start);
+  visited.add(+start);
+
   while (queue.length > 0) {
     const vertex = queue.shift();
     result.push(vertex);
-    const neighbors = graph[vertex].slice().sort((a, b) => a - b); // Sort neighbors in increasing order
-    neighbors.forEach((neighbor) => {
-      if (!visited.has(neighbor)) {
-        visited.add(neighbor);
-        queue.push(neighbor);
-      }
-    });
+    if (+vertex === +end) break; // Stop the traversal if the end node is found
+
+    graph[vertex]
+      .slice()
+      .sort((a, b) => a - b)
+      .forEach((neighbor) => {
+        if (!visited.has(neighbor)) {
+          visited.add(neighbor);
+          if (+neighbor === +end) {
+            // Check if the neighbor is the end node before enqueueing
+            queue.push(neighbor);
+            return result.concat(neighbor); // Immediately return the result including the end node
+          }
+          queue.push(neighbor);
+        }
+      });
   }
   return result;
 }
 
-function dfs(graph, start) {
+function dfs(graph, start, end = null) {
   const visited = new Set();
   const stack = [start];
   const result = [];
+
   while (stack.length > 0) {
     const vertex = stack.pop();
     if (!visited.has(vertex)) {
       visited.add(vertex);
       result.push(vertex);
-      const neighbors = graph[vertex].slice().sort((a, b) => b - a); // Sort in decreasing order for stack
-      neighbors.forEach((neighbor) => {
-        if (!visited.has(neighbor)) {
-          stack.push(neighbor);
-        }
-      });
+      if (vertex === end) break; // Stop the traversal if the end node is found
+
+      graph[vertex]
+        .slice()
+        .sort((a, b) => b - a)
+        .forEach((neighbor) => {
+          if (!visited.has(neighbor)) {
+            if (neighbor === end) {
+              // Check if the neighbor is the end node before pushing to the stack
+              stack.push(neighbor);
+              return result.concat(neighbor); // Immediately return the result including the end node
+            }
+            stack.push(neighbor);
+          }
+        });
     }
   }
   return result;
