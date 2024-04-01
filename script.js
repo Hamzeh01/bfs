@@ -1,36 +1,40 @@
-document.getElementById('startTraversal').addEventListener('click', function() {
-  const fileInput = document.getElementById('fileInput');
-  const startNodeInput = document.getElementById('startNode');
-  const algorithmChoice = document.getElementById('algorithmChoice').value;
-  const file = fileInput.files[0];
-  const startNode = parseInt(startNodeInput.value, 10);
-  
-  if (!file) {
-      alert('Please upload a file.');
+document
+  .getElementById("startTraversal")
+  .addEventListener("click", function () {
+    const fileInput = document.getElementById("fileInput");
+    const startNodeInput = document.getElementById("startNode");
+    const algorithmChoice = document.getElementById("algorithmChoice").value;
+    const file = fileInput.files[0];
+    const startNode = parseInt(startNodeInput.value, 10);
+
+    if (!file) {
+      alert("Please upload a file.");
       return;
-  }
-  if (isNaN(startNode) || startNode < 1) {
-      alert('Please enter a valid start node (integer > 0).');
+    }
+    if (isNaN(startNode) || startNode < 1) {
+      alert("Please enter a valid start node (integer > 0).");
       return;
-  }
-  
-  const reader = new FileReader();
-  reader.onload = function(e) {
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
       const graph = parseGraph(e.target.result);
       if (!graph[startNode]) {
-          alert('Start node not found in graph. Please enter a valid start node.');
-          return;
+        alert(
+          "Start node not found in graph. Please enter a valid start node."
+        );
+        return;
       }
       let result;
-      if (algorithmChoice === 'BFS') {
-          result = bfs(graph, startNode.toString());
-      } else if (algorithmChoice === 'DFS') {
-          result = dfs(graph, startNode.toString());
+      if (algorithmChoice === "BFS") {
+        result = bfs(graph, startNode.toString());
+      } else if (algorithmChoice === "DFS") {
+        result = dfs(graph, startNode.toString());
       }
       displayResult(result);
-  };
-  reader.readAsText(file);
-});
+    };
+    reader.readAsText(file);
+  });
 
 function parseGraph(text) {
   const edges = text.trim().split("\n");
@@ -41,18 +45,6 @@ function parseGraph(text) {
     if (!graph[to]) graph[to] = [];
     graph[from].push(to);
     graph[to].push(from); // Add the reverse direction for undirected graph
-  });
-  return graph;
-}
-
-function parseGraph(text) {
-  const edges = text.trim().split("\n");
-  const graph = {};
-  edges.forEach((edge) => {
-    const [from, to] = edge.split("\t").map(Number);
-    if (!graph[from]) graph[from] = [];
-    graph[from].push(to);
-    if (!graph[to]) graph[to] = []; // Ensure all nodes are in the graph, even if they have no outgoing edges
   });
   return graph;
 }
@@ -97,6 +89,6 @@ function dfs(graph, start) {
 }
 
 function displayResult(result) {
-  const container = document.getElementById('traversalResult');
+  const container = document.getElementById("traversalResult");
   container.innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
 }
