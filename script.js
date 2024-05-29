@@ -70,7 +70,7 @@ function bfs(graph, start, end = null) {
   while (queue.length > 0) {
     const vertex = queue.shift();
     result.push(vertex);
-    if (+vertex === +end) break; // Stop the traversal if the end node is found
+    if (+vertex === +end) break;
 
     graph[vertex]
       .slice()
@@ -79,7 +79,6 @@ function bfs(graph, start, end = null) {
         if (!visited.has(neighbor)) {
           visited.add(neighbor);
           if (+neighbor === +end) {
-            // Check if the neighbor is the end node before enqueueing
             queue.push(neighbor);
             return result.concat(neighbor); // Immediately return the result including the end node
           }
@@ -100,7 +99,7 @@ function dfs(graph, start, end = null) {
     if (!visited.has(vertex)) {
       visited.add(vertex);
       result.push(vertex);
-      if (vertex === end) break; // Stop the traversal if the end node is found
+      if (vertex === end) break;
 
       graph[vertex]
         .slice()
@@ -108,7 +107,6 @@ function dfs(graph, start, end = null) {
         .forEach((neighbor) => {
           if (!visited.has(neighbor)) {
             if (neighbor === end) {
-              // Check if the neighbor is the end node before pushing to the stack
               stack.push(neighbor);
               return result.concat(neighbor); // Immediately return the result including the end node
             }
