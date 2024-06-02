@@ -18,7 +18,7 @@ function handleFileUpload(event) {
     const content = e.target.result;
     graph = parseAdjacencyList(content);
     nodes = Object.keys(graph).map(Number);
-    alert("Graph loaded successfully!");
+    printGraph(graph);
   };
   reader.readAsText(file);
 }
@@ -33,7 +33,18 @@ function parseAdjacencyList(content) {
     graph[node1].push(node2);
     graph[node2].push(node1);
   });
+  // Sort adjacency lists in ascending order
+  for (const node in graph) {
+    graph[node].sort((a, b) => a - b);
+  }
   return graph;
+}
+
+function printGraph(graph) {
+  console.log("Sorted graph adjacency list:");
+  for (const node in graph) {
+    console.log(`${node}: ${graph[node].join(", ")}`);
+  }
 }
 
 function startTraversal() {
@@ -42,7 +53,7 @@ function startTraversal() {
   const algorithm = document.getElementById("algorithmChoice").value;
 
   if (!startNode || !graph[startNode]) {
-    alert("Please enter a valid start node.");
+    console.log("Please enter a valid start node.");
     return;
   }
 
@@ -57,43 +68,63 @@ function startTraversal() {
 }
 
 function bfs(graph, start, end = null) {
-  const visited = new Set();
-  const queue = [[start]];
+  console.log(`Starting BFS from node ${start}`);
+  const visited = [];
+  const queue = [start];
+  const parent = { [start]: null };
+
   while (queue.length > 0) {
-    const path = queue.shift();
-    const node = path[path.length - 1];
-    if (!visited.has(node)) {
+    const node = queue.shift();
+    console.log(`Dequeued node ${node}`);
+    if (!visited.includes(node)) {
+      visited.push(node);
+      console.log(`Visited nodes: ${visited.join(", ")}`);
       if (node === end) {
-        return path;
+        console.log(`Found end node ${end}`);
+        return visited;
       }
-      visited.add(node);
+
       for (const neighbor of graph[node]) {
-        const newPath = [...path, neighbor];
-        queue.push(newPath);
+        if (!visited.includes(neighbor) && !queue.includes(neighbor)) {
+          parent[neighbor] = node;
+          queue.push(neighbor);
+          console.log(`Enqueued node ${neighbor}`);
+        }
       }
     }
   }
-  return Array.from(visited);
+
+  return visited;
 }
 
 function dfs(graph, start, end = null) {
-  const visited = new Set();
-  const stack = [[start]];
+  console.log(`Starting DFS from node ${start}`);
+  const visited = [];
+  const stack = [start];
+  const parent = { [start]: null };
+
   while (stack.length > 0) {
-    const path = stack.pop();
-    const node = path[path.length - 1];
-    if (!visited.has(node)) {
+    const node = stack.pop();
+    console.log(`Popped node ${node}`);
+    if (!visited.includes(node)) {
+      visited.push(node);
+      console.log(`Visited nodes: ${visited.join(", ")}`);
       if (node === end) {
-        return path;
+        console.log(`Found end node ${end}`);
+        return visited;
       }
-      visited.add(node);
-      for (const neighbor of graph[node]) {
-        const newPath = [...path, neighbor];
-        stack.push(newPath);
+
+      for (const neighbor of graph[node].slice().reverse()) {
+        if (!visited.includes(neighbor) && !stack.includes(neighbor)) {
+          parent[neighbor] = node;
+          stack.push(neighbor);
+          console.log(`Pushed node ${neighbor}`);
+        }
       }
     }
   }
-  return Array.from(visited);
+
+  return visited;
 }
 
 function displayResult(result) {
