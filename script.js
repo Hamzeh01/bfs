@@ -1,124 +1,109 @@
 document
+  .getElementById("fileInput")
+  .addEventListener("change", handleFileUpload);
+document
   .getElementById("startTraversal")
-  .addEventListener("click", function () {
-    const fileInput = document.getElementById("fileInput");
-    const startNodeInput = document.getElementById("startNode");
-    const endNodeInput = document.getElementById("endNode");
-    const algorithmChoice = document.getElementById("algorithmChoice").value;
-    const file = fileInput.files[0];
-    const startNode = parseInt(startNodeInput.value, 10);
-    const endNode = endNodeInput.value
-      ? parseInt(endNodeInput.value, 10)
-      : null;
+  .addEventListener("click", startTraversal);
+document
+  .getElementById("randomSelect")
+  .addEventListener("click", randomSelectNodes);
 
-    if (!file) {
-      alert("Please upload a file.");
-      return;
-    }
-    if (isNaN(startNode) || startNode < 1) {
-      alert("Please enter a valid start node (integer > 0).");
-      return;
-    }
+let graph = {};
+let nodes = [];
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const graph = parseGraph(e.target.result);
-      if (!graph[startNode]) {
-        alert(
-          "Start node not found in graph. Please enter a valid start node."
-        );
-        return;
-      }
-      let result;
-      if (algorithmChoice === "BFS") {
-        result = bfs(
-          graph,
-          startNode.toString(),
-          endNode && endNode.toString()
-        );
-      } else if (algorithmChoice === "DFS") {
-        result = dfs(
-          graph,
-          startNode.toString(),
-          endNode && endNode.toString()
-        );
-      }
-      displayResult(result);
-    };
-    reader.readAsText(file);
-  });
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const content = e.target.result;
+    graph = parseAdjacencyList(content);
+    nodes = Object.keys(graph).map(Number);
+    alert("Graph loaded successfully!");
+  };
+  reader.readAsText(file);
+}
 
-function parseGraph(text) {
-  const edges = text.trim().split("\n");
+function parseAdjacencyList(content) {
+  const lines = content.trim().split("\n");
   const graph = {};
-  edges.forEach((edge) => {
-    const [from, to] = edge.split("\t").map(Number);
-    if (!graph[from]) graph[from] = [];
-    if (!graph[to]) graph[to] = [];
-    graph[from].push(to);
-    graph[to].push(from); // Add the reverse direction for undirected graph
+  lines.forEach((line) => {
+    const [node1, node2] = line.split("\t").map(Number);
+    if (!graph[node1]) graph[node1] = [];
+    if (!graph[node2]) graph[node2] = [];
+    graph[node1].push(node2);
+    graph[node2].push(node1);
   });
   return graph;
 }
 
+function startTraversal() {
+  const startNode = parseInt(document.getElementById("startNode").value);
+  const endNode = parseInt(document.getElementById("endNode").value) || null;
+  const algorithm = document.getElementById("algorithmChoice").value;
+
+  if (!startNode || !graph[startNode]) {
+    alert("Please enter a valid start node.");
+    return;
+  }
+
+  let result;
+  if (algorithm === "BFS") {
+    result = bfs(graph, startNode, endNode);
+  } else if (algorithm === "DFS") {
+    result = dfs(graph, startNode, endNode);
+  }
+
+  displayResult(result);
+}
+
 function bfs(graph, start, end = null) {
   const visited = new Set();
-  const queue = [start];
-  const result = [];
-  visited.add(+start);
-
+  const queue = [[start]];
   while (queue.length > 0) {
-    const vertex = queue.shift();
-    result.push(vertex);
-    if (+vertex === +end) break;
-
-    graph[vertex]
-      .slice()
-      .sort((a, b) => a - b)
-      .forEach((neighbor) => {
-        if (!visited.has(neighbor)) {
-          visited.add(neighbor);
-          if (+neighbor === +end) {
-            queue.push(neighbor);
-            return result.concat(neighbor); // Immediately return the result including the end node
-          }
-          queue.push(neighbor);
-        }
-      });
+    const path = queue.shift();
+    const node = path[path.length - 1];
+    if (!visited.has(node)) {
+      if (node === end) {
+        return path;
+      }
+      visited.add(node);
+      for (const neighbor of graph[node]) {
+        const newPath = [...path, neighbor];
+        queue.push(newPath);
+      }
+    }
   }
-  return result;
+  return Array.from(visited);
 }
 
 function dfs(graph, start, end = null) {
   const visited = new Set();
-  const stack = [start];
-  const result = [];
-
+  const stack = [[start]];
   while (stack.length > 0) {
-    const vertex = stack.pop();
-    if (!visited.has(vertex)) {
-      visited.add(vertex);
-      result.push(vertex);
-      if (vertex === end) break;
-
-      graph[vertex]
-        .slice()
-        .sort((a, b) => b - a)
-        .forEach((neighbor) => {
-          if (!visited.has(neighbor)) {
-            if (neighbor === end) {
-              stack.push(neighbor);
-              return result.concat(neighbor); // Immediately return the result including the end node
-            }
-            stack.push(neighbor);
-          }
-        });
+    const path = stack.pop();
+    const node = path[path.length - 1];
+    if (!visited.has(node)) {
+      if (node === end) {
+        return path;
+      }
+      visited.add(node);
+      for (const neighbor of graph[node]) {
+        const newPath = [...path, neighbor];
+        stack.push(newPath);
+      }
     }
   }
-  return result;
+  return Array.from(visited);
 }
 
 function displayResult(result) {
-  const container = document.getElementById("traversalResult");
-  container.innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+  const resultContainer = document.getElementById("traversalResult");
+  resultContainer.textContent = `Traversal result: ${result.join(" -> ")}`;
+}
+
+function randomSelectNodes() {
+  const startNode = nodes[Math.floor(Math.random() * nodes.length)];
+  const endNode = nodes[Math.floor(Math.random() * nodes.length)];
+  document.getElementById("startNode").value = startNode;
+  document.getElementById("endNode").value = endNode;
 }
