@@ -4,11 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Graph Traversal Visualization</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
+  <body class="dark-mode">
     <div id="app">
       <h1>Graph Traversal Visualization</h1>
+      <button id="modeSwitch" class="mode-switch">
+        <span id="modeIcon">🌜</span> Dark Mode
+      </button>
       <div class="form-group">
         <input type="file" id="fileInput" accept=".txt" />
         <input
@@ -36,7 +43,6 @@
       </div>
       <div id="traversalResult"></div>
     </div>
-
     <script src="script.js"></script>
   </body>
 </html>
