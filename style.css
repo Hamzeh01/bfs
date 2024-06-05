@@ -1,23 +1,29 @@
 :root {
-  --background-color: #f4f4f9; /* A soft, light background */
-  --foreground-color: #3a3a55; /* A deep, contrast-rich foreground color */
-  --accent-color: #6a5acd; /* A vibrant purple accent */
-  --accent-secondary-color: #6495ed; /* A complementary blue accent */
-  --border-style: 2px solid var(--accent-color);
-  --input-bg-color: #ffffff;
-  --box-shadow-color: rgba(106, 90, 205, 0.3);
+  --background-color-light: #f4f4f9;
+  --foreground-color-light: #1c1c28;
+  --background-color-dark: #1c1c28;
+  --foreground-color-dark: #f4f4f9;
+  --accent-color: #ff6f61;
+  --secondary-accent-color: #f9c74f;
+  --border-style: 0.125rem solid var(--accent-color);
+  --input-bg-color-light: #ffffff;
+  --input-bg-color-dark: #29293d;
+  --box-shadow-color: rgba(255, 111, 97, 0.5);
+  --font-family: "Poppins", sans-serif;
 }
 
-body,
-html {
+body {
   margin: 0;
   padding: 0;
+  font-family: var(--font-family);
+  background-color: var(--background-color-dark);
+  color: var(--foreground-color-dark);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Arial", sans-serif;
-  background-color: var(--background-color);
-  color: var(--foreground-color);
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+  overflow-x: hidden;
 }
 
 #app {
@@ -25,73 +31,145 @@ html {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  width: 80%;
-  max-width: 640px; /* Maintains a maximum width */
+  padding: 2rem;
+  width: 90%;
+  max-width: 50rem;
   box-sizing: border-box;
-  min-height: 50vh;
+  background-color: var(--background-color-dark);
+  border-radius: 1rem;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+  margin: 2.75rem auto;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.25rem;
+  color: var(--accent-color);
+  text-shadow: 0 0.25rem 0.5rem var(--box-shadow-color);
 }
 
 .form-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 1rem;
   width: 100%;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 input[type="file"],
 input[type="number"],
 select,
 button {
-  padding: 10px;
-  background: var(--input-bg-color);
+  padding: 1rem;
+  background: var(--input-bg-color-dark);
   border: var(--border-style);
-  color: var(--foreground-color);
-  font-size: 16px;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px var(--box-shadow-color);
+  color: var(--foreground-color-dark);
+  font-family: inherit;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.375rem var(--box-shadow-color);
   transition: all 0.3s ease;
-  width: calc(50% - 12px);
+  width: calc(50% - 1.25rem);
+  margin: 0.25rem;
 }
 
 input[type="file"]:hover,
 input[type="number"]:hover,
 select:hover,
 button:hover {
-  transform: translateY(-3px); /* Slight lift effect on hover */
-  box-shadow: 0 6px 12px var(--box-shadow-color);
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.375rem 0.75rem var(--box-shadow-color);
 }
 
 button {
   cursor: pointer;
   background-color: var(--accent-color);
-  color: var(--background-color);
+  color: var(--foreground-color-dark);
+  border: none;
 }
 
 #traversalResult {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: var(--foreground-color);
-  color: var(--background-color);
+  margin-top: 1.25rem;
+  line-height: 4rem;
+  word-spacing: 20px;
+  padding: 1.25rem;
+  background-color: var(--input-bg-color-dark);
+  color: var(--secondary-accent-color);
   border: var(--border-style);
   white-space: pre-wrap;
   width: 100%;
   box-sizing: border-box;
-  backdrop-filter: blur(5px);
-  border-radius: 5px;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-size: 1.2rem;
 }
 
-@media (max-width: 768px) {
+.mode-switch {
+  position: absolute;
+  top: 1rem;
+  right: 2.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--accent-color);
+  color: var(--foreground-color-dark);
+  border: var(--border-style);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.375rem var(--box-shadow-color);
+  transition: all 0.3s ease;
+  display: flex;
+  width: 10rem;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mode-switch:hover {
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.375rem 0.75rem var(--box-shadow-color);
+}
+
+body.light-mode {
+  background-color: var(--background-color-light);
+  color: var(--foreground-color-light);
+}
+
+body.light-mode #app {
+  background-color: var(--background-color-light);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode input[type="file"],
+body.light-mode input[type="number"],
+body.light-mode select,
+body.light-mode button {
+  background: var(--input-bg-color-light);
+  color: var(--foreground-color-light);
+}
+
+body.light-mode #traversalResult {
+  background-color: var(--input-bg-color-light);
+  color: var(--foreground-color-light);
+}
+
+@media (max-width: 48rem) {
   .form-group {
     flex-direction: column;
+    align-items: center;
   }
 
   input[type="file"],
   input[type="number"],
   select,
   button {
-    width: 100%; /* Full width on smaller screens */
+    width: 90%;
+  }
+
+  .mode-switch {
+    top: 0.5rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
   }
 }
