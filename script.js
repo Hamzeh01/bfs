@@ -101,7 +101,6 @@ function dfs(graph, start, end = null) {
   console.log(`Starting DFS from node ${start}`);
   const visited = [];
   const stack = [start];
-  const parent = { [start]: null };
 
   while (stack.length > 0) {
     const node = stack.pop();
@@ -114,9 +113,10 @@ function dfs(graph, start, end = null) {
         return visited;
       }
 
-      for (const neighbor of graph[node].slice().reverse()) {
+      // Push neighbors in reverse order to visit the smallest neighbor first
+      const neighbors = graph[node].slice().reverse();
+      for (const neighbor of neighbors) {
         if (!visited.includes(neighbor) && !stack.includes(neighbor)) {
-          parent[neighbor] = node;
           stack.push(neighbor);
           console.log(`Pushed node ${neighbor}`);
         }
