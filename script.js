@@ -75,14 +75,22 @@ function startTraversal() {
     return;
   }
 
+  const startTime = performance.now();
   let result;
+  let visitedCount = 0;
+
   if (algorithm === "BFS") {
     result = bfs(graph, startNode, endNode);
+    visitedCount = result.length;
   } else if (algorithm === "DFS") {
     result = dfs(graph, startNode, endNode);
+    visitedCount = result.length;
   }
 
-  displayResult(result);
+  const endTime = performance.now();
+  const executionTime = (endTime - startTime).toFixed(10);
+
+  displayResult(result, executionTime, visitedCount);
 }
 
 function bfs(graph, start, end = null) {
@@ -145,9 +153,11 @@ function dfs(graph, start, end = null) {
   return visited;
 }
 
-function displayResult(result) {
+function displayResult(result, executionTime, visitedCount) {
   const resultContainer = document.getElementById("traversalResult");
-  resultContainer.textContent = `Traversal result: ${result.join(" -> ")}`;
+  resultContainer.innerHTML = `Traversal result: ${result.join(
+    " -> "
+  )}<br>Execution time: ${executionTime} ms<br>Visited nodes: ${visitedCount}`;
 }
 
 function randomSelectNodes() {
