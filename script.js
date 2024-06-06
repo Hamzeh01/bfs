@@ -4,25 +4,30 @@ document
 document
   .getElementById("startTraversal")
   .addEventListener("click", startTraversal);
-  document.getElementById("modeSwitch").addEventListener("click", function () {
-    const body = document.body;
-    const modeIcon = document.getElementById("modeIcon");
-    const modeText = document.getElementById("modeSwitch");
-  
-    body.classList.toggle("light-mode");
-    body.classList.toggle("dark-mode");
-  
-    if (body.classList.contains("light-mode")) {
-      modeIcon.textContent = "🌞";
-      modeText.innerHTML = '<span id="modeIcon">🌞</span> Light Mode';
-    } else {
-      modeIcon.textContent = "🌜";
-      modeText.innerHTML = '<span id="modeIcon">🌜</span> Dark Mode';
-    }
-  });
+document
+  .getElementById("randomSelect")
+  .addEventListener("click", randomSelectNodes);
+document.getElementById("modeSwitch").addEventListener("click", toggleMode);
 
 let graph = {};
 let nodes = [];
+
+function toggleMode() {
+  const body = document.body;
+  const modeIcon = document.getElementById("modeIcon");
+  const modeText = document.getElementById("modeSwitch");
+
+  body.classList.toggle("light-mode");
+  body.classList.toggle("dark-mode");
+
+  if (body.classList.contains("light-mode")) {
+    modeIcon.textContent = "🌞";
+    modeText.innerHTML = '<span id="modeIcon">🌞</span> Light Mode';
+  } else {
+    modeIcon.textContent = "🌜";
+    modeText.innerHTML = '<span id="modeIcon">🌜</span> Dark Mode';
+  }
+}
 
 function handleFileUpload(event) {
   const file = event.target.files[0];
